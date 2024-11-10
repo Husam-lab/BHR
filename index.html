@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب الحد الأقصى لنبضات القلب</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+            width: 200px;
+        }
+
+        .input-container input {
+            width: 200px;
+                      text-align: center;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            background: transparent;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-container input:focus {
+            border-color: #1e90ff;
+        }
+
+        .input-container label {
+            position: absolute;
+            left: 60px;
+            top: 10px;
+            color: #888888;
+            background-color: #121212;
+            padding: 0 5px;
+            transition: 0.3s;
+            pointer-events: none;
+            font-size: 1em;
+        }
+
+        .input-container input:focus + label,
+        .input-container input:not(:placeholder-shown) + label {
+            top: -10px;
+            font-size: 0.8em;
+                      text-align: center;
+            color: #1e90ff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #ffffff;
+                      text-align: center;
+            background-color: #1e90ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #007acc;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <h2>حساب نبضات القلب (معادلة Tanaka)</h2>
+
+    <div class="input-container">
+        <input type="number" id="age" placeholder=" " oninput="clearResult()">
+        <label for="age">أدخل عمرك</label>
+    </div>
+    
+    <button onclick="calculateHeartRate()">احسب</button>
+    <button onclick="resetCalculator()">تصفير</button>
+
+    <h3>النتيجة:</h3>
+    <p id="result"></p>
+
+    <script>
+        function calculateHeartRate() {
+            // الحصول على العمر من المستخدم
+            let age = document.getElementById("age").value;
+
+            // التحقق من أن العمر ليس فارغاً أو سالباً
+            if (age === "" || age < 0) {
+                document.getElementById("result").innerText = "الرجاء إدخال العمر .";
+                return;
+            }
+
+            // حساب الحد الأقصى لنبضات القلب باستخدام معادلة Tanaka
+            let maxHeartRate = 208 - (0.7 * age);
+
+            // حساب نطاق منطقة حرق الدهون (60%-70% من الحد الأقصى لنبضات القلب)
+            let fatBurnMin = maxHeartRate * 0.6;
+            let fatBurnMax = maxHeartRate * 0.7;
+
+            // عرض النتائج للمستخدم
+            document.getElementById("result").innerText = 
+                `الحد الأقصى لنبضات القلب: ${maxHeartRate.toFixed(0)} نبضة في الدقيقة\n` +
+                `نطاق حرق الدهون: من ${fatBurnMin.toFixed(1)} إلى ${fatBurnMax.toFixed(0)} نبضة في الدقيقة`;
+        }
+
+        // دالة لتصفير الحقول وإعادة تعيين النتيجة
+        function resetCalculator() {
+            document.getElementById("age").value = "";
+            document.getElementById("result").innerText = "";
+        }
+
+        // دالة لتصفير النتيجة عند تعديل حقل العمر
+        function clearResult() {
+            document.getElementById("result").innerText = "";
+        }
+    </script>
+</body>
+</html>
