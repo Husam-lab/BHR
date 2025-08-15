@@ -1,143 +1,58 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب الحد الأقصى لنبضات القلب</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            text-align: center;
-            direction: rtl;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مراسلة واتساب</title>
+<meta name="theme-color" content="#0ea5e9">
+<link rel="manifest" href="data:application/json,{
+  &quot;name&quot;:&quot;مراسلة واتساب&quot;,
+  &quot;short_name&quot;:&quot;واتساب مباشر&quot;,
+  &quot;start_url&quot;:&quot;./&quot;,
+  &quot;display&quot;:&quot;standalone&quot;,
+  &quot;background_color&quot;:&quot;#0b1220&quot;,
+  &quot;theme_color&quot;:&quot;#0ea5e9&quot;,
+  &quot;icons&quot;:[{
+    &quot;src&quot;:&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABK0lEQVRYR+2WwQ2AIAxEwV2//8e7F5LCmh+I1cQmtl6tElRGx6MmiQAhJ1GAOAyD8eGMgiEfIYh+9BESkQLEjExf8m2J7FgmPZlUPgnxFOiGJkISvskFjvPjsuNf3P/Drfnd8u7+0bLZRAEG4D+3fMsy8gDG7efl2N4fYIXFr5sCeUEYALsD+2byJt0lTDr7IwD1F4iMAlkBXxipACqkgY0CJwFGkXq9M9t/qbip+Yx3VgC+bOEIC+z1lW2zJbvgAAAABJRU5ErkJggg==&quot;,
+    &quot;sizes&quot;:&quot;192x192&quot;,
+    &quot;type&quot;:&quot;image/png&quot;
+  }]
+}">
 
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        .input-container {
-            position: relative;
-            margin-bottom: 20px;
-            width: 200px;
-        }
-
-        .input-container input {
-            width: 200px;
-                      text-align: center;
-            padding: 10px;
-            font-size: 1em;
-            border: 2px solid #ffffff;
-            border-radius: 5px;
-            background: transparent;
-            color: #ffffff;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-container input:focus {
-            border-color: #1e90ff;
-        }
-
-        .input-container label {
-            position: absolute;
-            left: 60px;
-            top: 10px;
-            color: #888888;
-            background-color: #121212;
-            padding: 0 5px;
-            transition: 0.3s;
-            pointer-events: none;
-            font-size: 1em;
-        }
-
-        .input-container input:focus + label,
-        .input-container input:not(:placeholder-shown) + label {
-            top: -10px;
-            font-size: 0.8em;
-                      text-align: center;
-            color: #1e90ff;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 1em;
-            color: #ffffff;
-                      text-align: center;
-            background-color: #1e90ff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #007acc;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 1.1em;
-            white-space: pre-line;
-        }
-    </style>
+<style>
+html, body {margin:0;padding:0;height:100%;width:100%;display:flex;justify-content:center;align-items:center;background:#0b1220;font-family:system-ui,sans-serif;color:#e5e7eb}
+.card{background:rgba(17,24,39,.85);backdrop-filter:blur(8px);border-radius:20px;padding:30px 20px;box-shadow:0 10px 30px rgba(0,0,0,.35);text-align:center;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+h1{margin-bottom:20px;font-size:24px}
+label{display:block;margin-bottom:8px;font-size:14px;color:#cbd5e1;text-align:center}
+input,button{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(148,163,184,.18);background:#0f172a;color:#e5e7eb;font-size:16px;outline:none;margin-bottom:14px;text-align:center}
+input:focus,button:focus{border-color:#38bdf8;box-shadow:0 0 0 3px rgba(56,189,248,.2)}
+button{cursor:pointer;font-weight:600;background:linear-gradient(180deg,#10b981,#059669);border:none}
+.muted{color:#6b7280;font-size:12px;margin-top:6px;text-align:center}
+</style>
 </head>
 <body>
-    <h2>حساب نبضات القلب (معادلة Tanaka)</h2>
+<div class="card">
+<h1>مراسلة واتساب</h1>
+<label for="phone">رقم الهاتف (بدون صفر البداية)</label>
+<input id="phone" inputmode="numeric" pattern="[0-9]*" placeholder="7701234567" />
+<button id="openBtn">مراسلة على واتساب</button>
+<div class="muted">الرقم يُكتب بدون (+) أو 00 أو صفر البداية بعد رمز العراق +964</div>
+</div>
 
-    <div class="input-container">
-        <input type="number" id="age" placeholder=" " oninput="clearResult()">
-        <label for="age">أدخل عمرك</label>
-    </div>
-    
-    <button onclick="calculateHeartRate()">احسب</button>
-    <button onclick="resetCalculator()">تصفير</button>
+<script>
+const phoneInput=document.getElementById('phone');
+const openBtn=document.getElementById('openBtn');
+const DIAL_CODE="964";
 
-    <h3>النتيجة:</h3>
-    <p id="result"></p>
+function normalizeDigits(s){return(s||"").replace(/[\u0660-\u0669]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d]/g,"");}
+function buildWaLink(){let num=normalizeDigits(phoneInput.value);if(num.startsWith("0"))num=num.replace(/^0+/,"");if(num.length===0)return null;return `https://wa.me/${DIAL_CODE}${num}`;}
+function showToast(msg){const el=document.createElement('div');el.textContent=msg;Object.assign(el.style,{position:'fixed',inset:'auto 16px 16px 16px',background:'#111827',color:'#e5e7eb',padding:'10px 14px',borderRadius:'12px',border:'1px solid rgba(148,163,184,.2)',boxShadow:'0 10px 30px rgba(0,0,0,.35)',textAlign:'center',zIndex:9999});document.body.appendChild(el);setTimeout(()=>{el.remove();},2000);}
+openBtn.addEventListener('click',()=>{const link=buildWaLink();if(!link){showToast('رجاءً اكتب رقم الهاتف أولاً');phoneInput.focus();return;}window.location.href=link;});
+phoneInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();openBtn.click();}});
+phoneInput.addEventListener('input',()=>{phoneInput.value=normalizeDigits(phoneInput.value);});
 
-    <script>
-        function calculateHeartRate() {
-            // الحصول على العمر من المستخدم
-            let age = document.getElementById("age").value;
-
-            // التحقق من أن العمر ليس فارغاً أو سالباً
-            if (age === "" || age < 0) {
-                document.getElementById("result").innerText = "الرجاء إدخال العمر .";
-                return;
-            }
-
-            // حساب الحد الأقصى لنبضات القلب باستخدام معادلة Tanaka
-            let maxHeartRate = 208 - (0.7 * age);
-
-            // حساب نطاق منطقة حرق الدهون (60%-70% من الحد الأقصى لنبضات القلب)
-            let fatBurnMin = maxHeartRate * 0.6;
-            let fatBurnMax = maxHeartRate * 0.7;
-
-            // عرض النتائج للمستخدم
-            document.getElementById("result").innerText = 
-                `الحد الأقصى لنبضات القلب: ${maxHeartRate.toFixed(0)} نبضة في الدقيقة\n` +
-                `نطاق حرق الدهون: من ${fatBurnMin.toFixed(1)} إلى ${fatBurnMax.toFixed(0)} نبضة في الدقيقة`;
-        }
-
-        // دالة لتصفير الحقول وإعادة تعيين النتيجة
-        function resetCalculator() {
-            document.getElementById("age").value = "";
-            document.getElementById("result").innerText = "";
-        }
-
-        // دالة لتصفير النتيجة عند تعديل حقل العمر
-        function clearResult() {
-            document.getElementById("result").innerText = "";
-        }
-    </script>
+// Service Worker للتشغيل كـPWA
+if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript, self.addEventListener("install",e=>{e.waitUntil(Promise.resolve());});');}
+</script>
 </body>
 </html>
